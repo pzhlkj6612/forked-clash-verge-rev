@@ -483,6 +483,14 @@ Function .onInit
 
   !insertmacro SetContext
 
+  ; Block ARM64 installer on non-ARM64 systems to avoid broken installations
+  !if "${ARCH}" == "arm64"
+    ${IfNot} ${IsNativeARM64}
+      MessageBox MB_ICONSTOP "This installer is for Windows on ARM64. Please download the x64 installer for this PC."
+      Abort
+    ${EndIf}
+  !endif
+
   ${If} $INSTDIR == "${PLACEHOLDER_INSTALL_DIR}"
     ; Set default install location
     !if "${INSTALLMODE}" == "perMachine"
